@@ -1,0 +1,46 @@
+html {
+    background-image: url('assets/door-bg.png');
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+#door, #empty-door {
+    position: absolute;
+    top: 8.5%;
+    left: 35.8%;
+    width: 343px;
+    height: auto;
+}
+
+#empty-door.zoom-in {
+    transform: scale(10);
+    transition: transform 1s ease-in-out;
+}
+
+#boot-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #0f0;
+    font-family: monospace;
+    padding: 20px;
+    z-index: 1000;
+    white-space: pre-line;
+    overflow: hidden;
+}
+
+.fade-out {
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
