@@ -1,0 +1,157 @@
+html {
+    background-image: url('./assets/room.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#bookshelf {
+    position: absolute;
+    top: 18.2%;
+    left: 79.8%;
+    transform: translateX(-50%);
+    z-index: 5;
+}
+
+#desk {
+    position: absolute;
+    bottom: 8.8%;
+    left: 44%;
+    transform: translateX(-50%);
+    z-index: 8;
+}
+
+/*when hover over polaroid, it pulses*/
+
+#polaroid-wall {
+    position: absolute;
+    top: 10%;
+    left: 11.7%;
+    transform: translateX(-50%);
+    z-index: 6;
+}
+
+#polaroid-wall:hover {
+    animation: pulse 1s infinite;
+}
+@keyframes pulse {
+    0% {
+        transform: translateX(-50%) scale(1);
+    }
+    50% {
+        transform: translateX(-50%) scale(1.05);
+    }
+    100% {
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+/*when hover over crt monitor, monitor screen turns on*/
+
+#crt-monitor {
+    position: absolute;
+    bottom: 38.5%;
+    left: 43.5%;
+    transform: translateX(-50%);
+    z-index: 9;
+}
+
+#monitor-screen {
+    position: absolute;
+    bottom: 44.5%;
+    left: 43.5%;
+    width: 140px;
+    height: 105px;
+    background-color: #000;
+    border: 2px solid #333;
+    box-shadow: inset 0 0 10px #00ff00;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+/* hide monitor screen by default; reveal on hover (supports child, adjacent, or general sibling)
+   Use opacity/visibility for smooth fade (positioned absolute so it won't affect layout) */
+#monitor-screen {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 180ms ease-in-out, visibility 180ms linear;
+}
+
+#crt-monitor:hover + #monitor-screen,
+#crt-monitor:hover ~ #monitor-screen,
+#crt-monitor:hover #monitor-screen {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Monitor visual effects when visible: subtle glow and moving scanlines */
+#monitor-screen {
+    background: radial-gradient(circle at 50% 30%, #05220a 0%, #001203 40%, #000 100%);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#crt-monitor:hover + #monitor-screen {
+    /* glow pulse */
+    box-shadow: 0 0 18px rgba(0,255,120,0.06), inset 0 0 10px rgba(0,255,120,0.04);
+    animation: monitor-glow 2.6s ease-in-out infinite;
+}
+
+#monitor-screen::before {
+    /* moving scanlines */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.02) 0px,
+        rgba(255,255,255,0.02) 1px,
+        rgba(0,0,0,0) 1px,
+        rgba(0,0,0,0) 3px
+    );
+    mix-blend-mode: screen;
+    pointer-events: none;
+    opacity: 0.9;
+    transform: translateZ(0);
+    animation: scanlines 3s linear infinite;
+}
+
+#monitor-screen::after {
+    /* faint noise/scan overlay to add life */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(transparent, rgba(0,0,0,0.05));
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+@keyframes scanlines {
+    from { background-position: 0 0; }
+    to { background-position: 0 200px; }
+}
+
+@keyframes monitor-glow {
+    0% { box-shadow: 0 0 6px rgba(0,255,120,0.04), inset 0 0 6px rgba(0,255,120,0.02); }
+    50% { box-shadow: 0 0 20px rgba(0,255,120,0.12), inset 0 0 14px rgba(0,255,120,0.06); }
+    100% { box-shadow: 0 0 6px rgba(0,255,120,0.04), inset 0 0 6px rgba(0,255,120,0.02); }
+}
+
+/*when hover over scrapbook, it bounces*/
+#scrapbook {
+    position: absolute;
+    bottom: 37%;
+    left: 58%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+#scrapbook:hover {
+    animation: bounce 0.6s;
+}
+@keyframes bounce {
+    0% { transform: translateX(-50%) translateY(0); }
+    30% { transform: translateX(-50%) translateY(-15px); }
+    50% { transform: translateX(-50%) translateY(0); }
+    70% { transform: translateX(-50%) translateY(-7px); }
+    100% { transform: translateX(-50%) translateY(0); }
+}
