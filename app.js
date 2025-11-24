@@ -1,63 +1,90 @@
+// Clean, single-file implementation for zoom + bootscreen typewriter
 const door = document.getElementById('door');
-
-door.addEventListener('click', () => {
-    door.style.display = 'none';
-});
-
 const emptyDoor = document.getElementById('empty-door');
-
-emptyDoor.addEventListener('click', () => {
-    zoomInDoor();
-});
+const bootScreen = document.getElementById('boot-screen');
+const bootTextEl = document.getElementById('boot-text');
 
 let isAnimating = false;
 
-function zoomInDoor() {
-    isWindowAnimating = true;
+if (door) {
+    door.addEventListener('click', () => {
+        door.style.display = 'none';
+    });
+}
 
-    // Start zoom-in animation on the positioned container
+if (emptyDoor) {
+    emptyDoor.addEventListener('click', () => {
+        zoomInDoor();
+    });
+}
+
+function zoomInDoor() {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    document.body.classList.add('no-scroll');
     emptyDoor.classList.add('zoom-in');
 
-    // After the zoom completes, change background and hide elements
     const onTransitionEnd = (e) => {
-        // Only act on the transform transition to avoid duplicate calls
-        
-        // remove listeners from all three targets
+        if (e.propertyName && e.propertyName !== 'transform') return;
         emptyDoor.removeEventListener('transitionend', onTransitionEnd);
-
-        // Opens new window location
-        bootScreen.style.display = "block";
-        setTimeout(typeText, 500);
-        window.location.href = "/portfolio.html";
-
-        // allow future transitions
+        if (bootScreen) startBootSequence();
         isAnimating = false;
     };
 
-  emptyDoor.addEventListener('transitionend', onTransitionEnd);
+    emptyDoor.addEventListener('transitionend', onTransitionEnd);
 }
 
-const bootScreen = document.getElementById("boot-screen");
-let bootText = bootScreen.innerHTML;
-bootScreen.innerHTML = "";
+const bootText = `Nishka's Hub v1.0
 
-let charIndex = 0;
-const typeSpeed = 10;
+Booting up...
+Doing stuff...
+Memory Test... OK
+Made with ♡ by Nishka Kanchan
 
-function typeText() {
-    if (charIndex < bootText.length) {
-        bootScreen.innerHTML += bootText.charAt(charIndex);
-        charIndex++;
-        setTimeout(typeText, typeSpeed);
-    } else {
-        //const boot = new Audio("sfx/boot.mp3");
-        setTimeout(() => {
-            bootScreen.classList.add("fade-out");
-            //boot.play();
-            setTimeout(() => {
-                window.location.href = "/portfolio.html";
-            }, 1500);
-        }, 1000);
+Loading system files...
+SYSTEM.DAT........OK
+COMMAND.COM.......OK
+
+Initializing GUI...`;
+
+let _typing = false;
+
+function startBootSequence() {
+    if (!bootScreen || !bootTextEl) {
+        setTimeout(() => window.location.href = './portfolio.html', 700);
+        return;
     }
+
+    bootScreen.classList.add('visible');
+    bootTextEl.textContent = '';
+    _typing = true;
+    let idx = 0;
+
+    function typeNext() {
+        if (idx >= bootText.length) {
+            _typing = false;
+            setTimeout(() => {
+                bootScreen.classList.add('fade-out');
+                setTimeout(() => {
+                    window.location.href = './portfolio.html';
+                }, 900);
+            }, 700);
+            return;
+        }
+
+        const ch = bootText.charAt(idx);
+        bootTextEl.textContent += ch;
+        idx++;
+
+        let delay = 22;
+        if (ch === '\n') delay = 120;
+        if (ch === '.' || ch === ',') delay = 60;
+        if (ch === ' ') delay = 12;
+
+        setTimeout(typeNext, delay);
+    }
+
+    typeNext();
 }
 

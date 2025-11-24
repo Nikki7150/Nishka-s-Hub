@@ -3,10 +3,11 @@ html {
     background-size: cover;
     background-position: top;
     background-repeat: no-repeat;
-    overflow: hidden;
 }
 
-#door, #empty-door {
+#door {
+    cursor: pointer;
+    z-index: 10;
     position: absolute;
     top: 8.5%;
     left: 35.8%;
@@ -14,24 +15,80 @@ html {
     height: auto;
 }
 
-#empty-door.zoom-in {
-    transform: scale(10);
-    transition: transform 1s ease-in-out;
+#empty-door {
+    cursor: pointer;
+    position: absolute;
+    top: 8.5%;
+    left: 35.8%;
+    width: 343px;
+    height: auto;
+    transform: scale(1);
+    transition: transform 700ms cubic-bezier(.22,.98,.38,1);
+    transform-origin: center center;
+    will-change: transform;
+    z-index: 2;
 }
 
+#empty-door.zoom-in {
+    transform: scale(6);
+    transition: transform 700ms cubic-bezier(.22,.98,.38,1);
+    z-index: 9999;
+}
+
+/* Prevent scrolling while class added by JS */
+body.no-scroll, html.no-scroll {
+    overflow: hidden !important;
+    height: 100vh;
+}
+
+/* Boots creen overlay */
 #boot-screen {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.95) 60%);
+    color: #cde7ff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    padding: 2rem;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms ease-in-out;
+    z-index: 10000;
+    line-height: 1.6;
+}
+
+#boot-screen.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.boot-text {
+    display: block;
+    max-width: min(800px, 88%);
     width: 100%;
-    height: 100%;
-    background: #000;
-    color: #0f0;
-    font-family: monospace;
-    padding: 20px;
-    z-index: 1000;
-    white-space: pre-line;
-    overflow: hidden;
+    text-align: left;
+    white-space: pre-wrap;
+    font-family: 'Share Tech Mono', monospace;
+    color: #cfe9ff;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.boot-text::after {
+    content: '▌';
+    display: inline-block;
+    margin-left: 6px;
+    opacity: 1;
+    animation: blink 900ms steps(1) infinite;
+    color: #cfe9ff;
+}
+
+@keyframes blink {
+    50% { opacity: 0 }
 }
 
 .fade-out {
